@@ -1216,7 +1216,7 @@ export class ODataProcessor extends Transform{
                         }else if (type != "Edm.String" && type != "Edm.Boolean"){
                             let typeName = Edm.getTypeName(elementType, prop);
                             if (typeof type == "string" && type.indexOf("Edm.") == 0) typeName = typeName.replace(/Edm\./, "");
-                            context[`${prop}@odata.type`] = `#${typeName}`;
+                            if(result[prop]) context[`${prop}@odata.type`] = `#${typeName}`;
                         }
                     }
                     if (includes && includes[prop]){
