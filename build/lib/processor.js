@@ -1239,7 +1239,8 @@ class ODataProcessor extends stream_1.Transform {
                                 let typeName = Edm.getTypeName(elementType, prop);
                                 if (typeof type == "string" && type.indexOf("Edm.") == 0)
                                     typeName = typeName.replace(/Edm\./, "");
-                                context[`${prop}@odata.type`] = `#${typeName}`;
+                                if (typeof result[prop] !== 'undefined')
+                                    context[`${prop}@odata.type`] = `#${typeName}`;
                             }
                         }
                         if (includes && includes[prop]) {
