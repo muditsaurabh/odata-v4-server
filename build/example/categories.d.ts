@@ -1,5 +1,5 @@
 import { ObjectID } from "mongodb";
-declare const _default: {
+declare var _default: {
     "_id": ObjectID;
     "Description": string;
     "Name": string;
