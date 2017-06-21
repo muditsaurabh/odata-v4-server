@@ -1054,10 +1054,15 @@ class ODataProcessor extends stream_1.Transform {
                 elementType = body["@odata.type"];
             let keys = Edm.getKeyProperties(elementType);
             let resolveBaseType = (elementType) => {
-                let baseType = Object.getPrototypeOf(elementType.prototype).constructor;
-                if (baseType != Object && Edm.getProperties(baseType.prototype).length > 0) {
-                    keys = Edm.getKeyProperties(baseType).concat(keys);
-                    resolveBaseType(baseType);
+                if (elementType && elementType.prototype) {
+                    let proto = Object.getPrototypeOf(elementType.prototype);
+                    if (proto) {
+                        let baseType = proto.constructor;
+                        if (baseType != Object && Edm.getProperties(baseType.prototype).length > 0) {
+                            keys = Edm.getKeyProperties(baseType).concat(keys);
+                            resolveBaseType(baseType);
+                        }
+                    }
                 }
             };
             resolveBaseType(elementType);
@@ -1178,11 +1183,16 @@ class ODataProcessor extends stream_1.Transform {
             }
             let ctrl = this.serverType.getController(elementType);
             let resolveBaseType = (elementType) => {
-                let baseType = Object.getPrototypeOf(elementType.prototype).constructor;
-                if (baseType != Object && Edm.getProperties(baseType.prototype).length > 0) {
-                    props = Edm.getProperties(baseType.prototype).concat(props);
-                    ctrl = ctrl || this.serverType.getController(baseType);
-                    resolveBaseType(baseType);
+                if (elementType && elementType.prototype) {
+                    let proto = Object.getPrototypeOf(elementType.prototype);
+                    if (proto) {
+                        let baseType = proto.constructor;
+                        if (baseType != Object && Edm.getProperties(baseType.prototype).length > 0) {
+                            props = Edm.getProperties(baseType.prototype).concat(props);
+                            ctrl = ctrl || this.serverType.getController(baseType);
+                            resolveBaseType(baseType);
+                        }
+                    }
                 }
             };
             resolveBaseType(elementType);
